@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>geographic_plotting package &mdash; geographic-plotting v1.0 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="geographic_plotting" href="modules.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> geographic-plotting
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">geographic_plotting</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">geographic_plotting package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#module-geographic_plotting.color_functions">Submodules</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">geographic-plotting</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="modules.html">geographic_plotting</a> &raquo;</li>
+      <li>geographic_plotting package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/geographic_plotting.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-geographic_plotting">
+<span id="geographic-plotting-package"></span><h1>geographic_plotting package<a class="headerlink" href="#module-geographic_plotting" title="Permalink to this heading"></a></h1>
+<section id="module-geographic_plotting.color_functions">
+<span id="submodules"></span><h2>Submodules<a class="headerlink" href="#module-geographic_plotting.color_functions" title="Permalink to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="geographic_plotting.color_functions.zero_different_colormap">
+<span class="sig-prename descclassname"><span class="pre">geographic_plotting.color_functions.</span></span><span class="sig-name descname"><span class="pre">zero_different_colormap</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vmax</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cmap</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'viridis'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zero_color</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">array</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">array([1,</span> <span class="pre">1,</span> <span class="pre">1,</span> <span class="pre">1])</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stepsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#geographic_plotting.color_functions.zero_different_colormap" title="Permalink to this definition"></a></dt>
+<dd><p>Generate a colorlist in which zero gets another color. Useful for plotting discrete data where u want 0 to have
+a different representation</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>vmax</strong> – </p></li>
+<li><p><strong>cmap</strong> – </p></li>
+<li><p><strong>zero_color</strong> – </p></li>
+<li><p><strong>stepsize</strong> – </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<span class="target" id="module-geographic_plotting.geomap"></span><dl class="py class">
+<dt class="sig sig-object py" id="geographic_plotting.geomap.BaseMap">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">geographic_plotting.geomap.</span></span><span class="sig-name descname"><span class="pre">BaseMap</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">shape:</span> <span class="pre">tuple</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">transform:</span> <span class="pre">&lt;module</span> <span class="pre">'rasterio.transform'</span> <span class="pre">from</span> <span class="pre">'C:\\Users\\biers004\\Miniconda3\\envs\\mnp_rebuild\\lib\\site-packages\\rasterio\\transform.py'&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">crs:</span> <span class="pre">~rasterio.crs.CRS</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">source={'attribution':</span> <span class="pre">'(C)</span> <span class="pre">OpenStreetMap</span> <span class="pre">contributors</span> <span class="pre">(C)</span> <span class="pre">CARTO'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">'html_attribution':</span> <span class="pre">'&amp;copy;</span> <span class="pre">&lt;a</span> <span class="pre">href=&quot;https://www.openstreetmap.org/copyright&quot;&gt;OpenStreetMap&lt;/a&gt;</span> <span class="pre">contributors</span> <span class="pre">&amp;copy;</span> <span class="pre">&lt;a</span> <span class="pre">href=&quot;https://carto.com/attributions&quot;&gt;CARTO&lt;/a&gt;'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">'max_zoom':</span> <span class="pre">20</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">'name':</span> <span class="pre">'CartoDB.Voyager'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">'subdomains':</span> <span class="pre">'abcd'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">'url':</span> <span class="pre">'https://{s}.basemaps.cartocdn.com/{variant}/{z}/{x}/{y}{r}.png'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">'variant':</span> <span class="pre">'rastertiles/voyager'}</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#geographic_plotting.geomap.BaseMap" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#geographic_plotting.geomap.Layer" title="geographic_plotting.geomap.Layer"><code class="xref py py-class docutils literal notranslate"><span class="pre">Layer</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="geographic_plotting.geomap.BaseMap.draw">
+<span class="sig-name descname"><span class="pre">draw</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Axes</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#geographic_plotting.geomap.BaseMap.draw" title="Permalink to this definition"></a></dt>
+<dd><p>Draw a basemap for plotting geospatial rasters on</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>ax</strong> (<em>matplotlib.pyplot.Axes</em>) – Axes object to draw basemap on</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="geographic_plotting.geomap.CategoricalRasterLayer">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">geographic_plotting.geomap.</span></span><span class="sig-name descname"><span class="pre">CategoricalRasterLayer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">raster:</span> <span class="pre">~numpy.array</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">transform:</span> <span class="pre">&lt;module</span> <span class="pre">'rasterio.transform'</span> <span class="pre">from</span> <span class="pre">'C:\\Users\\biers004\\Miniconda3\\envs\\mnp_rebuild\\lib\\site-packages\\rasterio\\transform.py'&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">colorlist:</span> <span class="pre">list</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#geographic_plotting.geomap.CategoricalRasterLayer" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#geographic_plotting.geomap.RasterLayer" title="geographic_plotting.geomap.RasterLayer"><code class="xref py py-class docutils literal notranslate"><span class="pre">RasterLayer</span></code></a></p>
+<p>Raster layer with categorical data as integers</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>raster</strong> (<em>numpy.array</em>) – data as numpy array of integers</p></li>
+<li><p><strong>transform</strong> (<em>rasterio.transform</em>) – rasterio transform object to know where to plot layer</p></li>
+<li><p><strong>colorlist</strong> (<em>list</em>) – list of colors as tuples of values between 0 and 1: (r, g, b, alpha)</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="geographic_plotting.geomap.CategoricalRasterLayer.cmap">
+<span class="sig-name descname"><span class="pre">cmap</span></span><a class="headerlink" href="#geographic_plotting.geomap.CategoricalRasterLayer.cmap" title="Permalink to this definition"></a></dt>
+<dd><p>colormap for this layer</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="geographic_plotting.geomap.ColorBar">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">geographic_plotting.geomap.</span></span><span class="sig-name descname"><span class="pre">ColorBar</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">continuous_layer</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#geographic_plotting.geomap.ContinuousRasterLayer" title="geographic_plotting.geomap.ContinuousRasterLayer"><span class="pre">ContinuousRasterLayer</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">label</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#geographic_plotting.geomap.ColorBar" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>A color bar, pretty straightforward</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>continuous_layer</strong> – Raster layer to take normalization and colormap from</p></li>
+<li><p><strong>label</strong> (<em>str</em>) – Label vor the color bar</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="geographic_plotting.geomap.ColorBar.draw">
+<span class="sig-name descname"><span class="pre">draw</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">divider</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">AxesDivider</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#geographic_plotting.geomap.ColorBar.draw" title="Permalink to this definition"></a></dt>
+<dd><p>Draw colorbar for result layer</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>divider</strong> (<em>mpl_toolkits.axes_grid1.axes_divider.AxesDivider</em>) – AxesDivider which will make seperate axes for color bar. <a class="reference external" href="https://matplotlib.org/stable/gallery/axes_grid1/demo_colorbar_with_axes_divider.html">Example for how to make divider</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="geographic_plotting.geomap.ContinuousRasterLayer">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">geographic_plotting.geomap.</span></span><span class="sig-name descname"><span class="pre">ContinuousRasterLayer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">raster:</span> <span class="pre">~numpy.array</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">transform:</span> <span class="pre">&lt;module</span> <span class="pre">'rasterio.transform'</span> <span class="pre">from</span> <span class="pre">'C:\\Users\\biers004\\Miniconda3\\envs\\mnp_rebuild\\lib\\site-packages\\rasterio\\transform.py'&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cmap:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">'viridis'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cmap_stepsize:</span> <span class="pre">int</span> <span class="pre">=</span> <span class="pre">10</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#geographic_plotting.geomap.ContinuousRasterLayer" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#geographic_plotting.geomap.RasterLayer" title="geographic_plotting.geomap.RasterLayer"><code class="xref py py-class docutils literal notranslate"><span class="pre">RasterLayer</span></code></a></p>
+<p>Raster layer with continuous data</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>raster</strong> (<em>numpy.array</em>) – data as numpy array</p></li>
+<li><p><strong>transform</strong> (<em>rasterio.transform</em>) – rasterio transform object to know where to plot layer</p></li>
+<li><p><strong>cmap</strong> (<em>str</em><em>, </em><em>matplotlib.colors.ListedColormap</em>) – string or ListedColormap specifying which colormap to plot with</p></li>
+<li><p><strong>cmap_stepsize</strong> (<em>int</em>) – the number of steps between each whole number. default is 10, so that the colormap is divided into steps of 0.1</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="geographic_plotting.geomap.ContinuousRasterLayer.cmap">
+<span class="sig-name descname"><span class="pre">cmap</span></span><a class="headerlink" href="#geographic_plotting.geomap.ContinuousRasterLayer.cmap" title="Permalink to this definition"></a></dt>
+<dd><p>colormap for continuous raster layer</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="geographic_plotting.geomap.ContinuousRasterLayer.norm">
+<span class="sig-name descname"><span class="pre">norm</span></span><a class="headerlink" href="#geographic_plotting.geomap.ContinuousRasterLayer.norm" title="Permalink to this definition"></a></dt>
+<dd><p>make normalization</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="geographic_plotting.geomap.GeoMap">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">geographic_plotting.geomap.</span></span><span class="sig-name descname"><span class="pre">GeoMap</span></span><a class="headerlink" href="#geographic_plotting.geomap.GeoMap" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Geographic map object for plotting geographic rasters.</p>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">gmap</span> <span class="o">=</span> <span class="n">GeoMap</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">result_layer</span> <span class="o">=</span> <span class="n">ContinuousRasterLayer</span><span class="p">(</span><span class="n">result_array</span><span class="p">,</span>
+<span class="go">                                     rio.transform.Affine(25.0, 0.0, 3412500.0, 0.0, -25.0, 5960000.0),</span>
+<span class="go">                                     &quot;viridis&quot;)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">vegetation_layer</span> <span class="o">=</span> <span class="n">CategoricalRasterLayer</span><span class="p">(</span><span class="n">management_array</span><span class="p">,</span>
+<span class="go">                                          rio.transform.Affine(2.5, 0.0, 3412500.0, 0.0, -2.5, 5960000.0),</span>
+<span class="go">                                          colorlist_mask)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">vegetation_dict</span> <span class="o">=</span> <span class="p">{</span><span class="mi">1</span><span class="p">:</span><span class="s1">&#39;N01.00&#39;</span><span class="p">,</span><span class="mi">2</span><span class="p">:</span><span class="s1">&#39;N02.00&#39;</span><span class="p">}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">gmap</span><span class="o">.</span><span class="n">add_layer</span><span class="p">(</span><span class="n">BaseMap</span><span class="p">(</span><span class="n">result_array</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">rio</span><span class="o">.</span><span class="n">transform</span><span class="o">.</span><span class="n">Affine</span><span class="p">(</span><span class="mf">25.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">3412500.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">25.0</span><span class="p">,</span> <span class="mf">5960000.0</span><span class="p">),</span> <span class="n">CRS</span><span class="o">.</span><span class="n">from_epsg</span><span class="p">(</span><span class="mi">28992</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">gmap</span><span class="o">.</span><span class="n">add_layer</span><span class="p">(</span><span class="n">vegetation_layer</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">gmap</span><span class="o">.</span><span class="n">add_layer</span><span class="p">(</span><span class="n">result_layer</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">gmap</span><span class="o">.</span><span class="n">add_categorical_legend</span><span class="p">(</span><span class="n">vegetation_layer</span><span class="p">,</span> <span class="n">vegetation_dict</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">gmap</span><span class="o">.</span><span class="n">add_colorbar</span><span class="p">(</span><span class="n">result_layer</span><span class="p">,</span> <span class="s2">&quot;this is very nice color bar&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">gmap</span><span class="o">.</span><span class="n">title</span> <span class="o">=</span> <span class="s2">&quot;this is a very nice geographic map&quot;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mf">12.75</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">gmap</span><span class="o">.</span><span class="n">draw</span><span class="p">(</span><span class="n">ax</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="geographic_plotting.geomap.GeoMap.add_categorical_legend">
+<span class="sig-name descname"><span class="pre">add_categorical_legend</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">categorical_layer</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#geographic_plotting.geomap.CategoricalRasterLayer" title="geographic_plotting.geomap.CategoricalRasterLayer"><span class="pre">CategoricalRasterLayer</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">dictionary</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#geographic_plotting.geomap.GeoMap.add_categorical_legend" title="Permalink to this definition"></a></dt>
+<dd><p>Add categorical Legend to GeoMap</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>categorical_layer</strong> – </p></li>
+<li><p><strong>dictionary</strong> – </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="geographic_plotting.geomap.GeoMap.add_colorbar">
+<span class="sig-name descname"><span class="pre">add_colorbar</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">continuous_layer</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#geographic_plotting.geomap.GeoMap.add_colorbar" title="Permalink to this definition"></a></dt>
+<dd><p>Add a color bar to this GeoMap</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>continuous_layer</strong> – continuous layer to get colormap and normalization from</p></li>
+<li><p><strong>label</strong> (<em>str</em>) – what does this bar say?</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="geographic_plotting.geomap.GeoMap.add_layer">
+<span class="sig-name descname"><span class="pre">add_layer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">layer</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#geographic_plotting.geomap.Layer" title="geographic_plotting.geomap.Layer"><span class="pre">Layer</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#geographic_plotting.geomap.GeoMap.add_layer" title="Permalink to this definition"></a></dt>
+<dd><p>Add a layer to the GeoMap</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>layer</strong> (<a class="reference internal" href="#geographic_plotting.geomap.Layer" title="geographic_plotting.geomap.Layer"><em>Layer</em></a>) – The layer to add to this GeoMAp</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="geographic_plotting.geomap.GeoMap.arrow_parameters">
+<span class="sig-name descname"><span class="pre">arrow_parameters</span></span><a class="headerlink" href="#geographic_plotting.geomap.GeoMap.arrow_parameters" title="Permalink to this definition"></a></dt>
+<dd><p>arrow location as (x, y, correction)</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="geographic_plotting.geomap.GeoMap.basemap_labels">
+<span class="sig-name descname"><span class="pre">basemap_labels</span></span><a class="headerlink" href="#geographic_plotting.geomap.GeoMap.basemap_labels" title="Permalink to this definition"></a></dt>
+<dd><p>basmap label provider</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="geographic_plotting.geomap.GeoMap.do_basemap_labels">
+<span class="sig-name descname"><span class="pre">do_basemap_labels</span></span><a class="headerlink" href="#geographic_plotting.geomap.GeoMap.do_basemap_labels" title="Permalink to this definition"></a></dt>
+<dd><p>plot basemap labels over all other layers?</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="geographic_plotting.geomap.GeoMap.draw">
+<span class="sig-name descname"><span class="pre">draw</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Axes</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#geographic_plotting.geomap.GeoMap.draw" title="Permalink to this definition"></a></dt>
+<dd><p>Draw basemap and raster layers in order and plot all vector layers.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>ax</strong> (<em>matplotlib.pyplot.Axes</em>) – Axes object to plot everything on</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="geographic_plotting.geomap.GeoMap.north_arrow">
+<span class="sig-name descname"><span class="pre">north_arrow</span></span><a class="headerlink" href="#geographic_plotting.geomap.GeoMap.north_arrow" title="Permalink to this definition"></a></dt>
+<dd><p>draw a north arrow?</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="geographic_plotting.geomap.GeoMap.scalebar">
+<span class="sig-name descname"><span class="pre">scalebar</span></span><a class="headerlink" href="#geographic_plotting.geomap.GeoMap.scalebar" title="Permalink to this definition"></a></dt>
+<dd><p>draw a scalebar?</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="geographic_plotting.geomap.GeoMap.title">
+<span class="sig-name descname"><span class="pre">title</span></span><a class="headerlink" href="#geographic_plotting.geomap.GeoMap.title" title="Permalink to this definition"></a></dt>
+<dd><p>the title for this GeoMap</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="geographic_plotting.geomap.Layer">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">geographic_plotting.geomap.</span></span><span class="sig-name descname"><span class="pre">Layer</span></span><a class="headerlink" href="#geographic_plotting.geomap.Layer" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ABC</span></code></p>
+<p>Layer parent class</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="geographic_plotting.geomap.Layer.draw">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">draw</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Axes</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#geographic_plotting.geomap.Layer.draw" title="Permalink to this definition"></a></dt>
+<dd><p>Draw this layer upon axes</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>ax</strong> (<em>matplotlib.pyplot.Axes</em>) – Axes object to draw this layer on</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="geographic_plotting.geomap.Layer.visible">
+<span class="sig-name descname"><span class="pre">visible</span></span><a class="headerlink" href="#geographic_plotting.geomap.Layer.visible" title="Permalink to this definition"></a></dt>
+<dd><p>is this layer visible?</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="geographic_plotting.geomap.MtLegend">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">geographic_plotting.geomap.</span></span><span class="sig-name descname"><span class="pre">MtLegend</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">categorical_raster</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#geographic_plotting.geomap.CategoricalRasterLayer" title="geographic_plotting.geomap.CategoricalRasterLayer"><span class="pre">CategoricalRasterLayer</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">dictionary</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#geographic_plotting.geomap.MtLegend" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Management type legend class</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>categorical_raster</strong> (<a class="reference internal" href="#geographic_plotting.geomap.CategoricalRasterLayer" title="geographic_plotting.geomap.CategoricalRasterLayer"><em>CategoricalRasterLayer</em></a>) – Management type layer with management types as integers</p></li>
+<li><p><strong>dictionary</strong> (<em>dict</em>) – Dictionary to translate integer values to labels or landscape type codes</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="geographic_plotting.geomap.MtLegend.draw">
+<span class="sig-name descname"><span class="pre">draw</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">divider</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">AxesDivider</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#geographic_plotting.geomap.MtLegend.draw" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>divider</strong> – <p>AxesDivider which will make seperate axes for management type legend. <a class="reference external" href="https://matplotlib.org/stable/gallery/axes_grid1/demo_colorbar_with_axes_divider.html">Example for how to make divider</a></p>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="geographic_plotting.geomap.RasterLayer">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">geographic_plotting.geomap.</span></span><span class="sig-name descname"><span class="pre">RasterLayer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">raster</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">transform</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#geographic_plotting.geomap.RasterLayer" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#geographic_plotting.geomap.Layer" title="geographic_plotting.geomap.Layer"><code class="xref py py-class docutils literal notranslate"><span class="pre">Layer</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="geographic_plotting.geomap.RasterLayer.ceiling">
+<span class="sig-name descname"><span class="pre">ceiling</span></span><a class="headerlink" href="#geographic_plotting.geomap.RasterLayer.ceiling" title="Permalink to this definition"></a></dt>
+<dd><p>ceiling of raster values</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="geographic_plotting.geomap.RasterLayer.draw">
+<span class="sig-name descname"><span class="pre">draw</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Axes</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#geographic_plotting.geomap.RasterLayer.draw" title="Permalink to this definition"></a></dt>
+<dd><p>Draw management type map as background</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>ax</strong> (<em>matplotlib.pyplot.Axes</em>) – Axes object to draw layer on</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="geographic_plotting.geomap.VectorLayer">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">geographic_plotting.geomap.</span></span><span class="sig-name descname"><span class="pre">VectorLayer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">GeoDataFrame</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#geographic_plotting.geomap.VectorLayer" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#geographic_plotting.geomap.Layer" title="geographic_plotting.geomap.Layer"><code class="xref py py-class docutils literal notranslate"><span class="pre">Layer</span></code></a></p>
+<p>Vector layer</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>vector</strong> (<em>geopandas.GeoDataFrame</em>) – GeodataFrame containing the vector</p></li>
+<li><p><strong>kwargs</strong> – Keyword arguments to set layer properties</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="geographic_plotting.geomap.VectorLayer.draw">
+<span class="sig-name descname"><span class="pre">draw</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ax</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#geographic_plotting.geomap.VectorLayer.draw" title="Permalink to this definition"></a></dt>
+<dd><p>Draw this vector layer on the Axes</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>ax</strong> (<em>matplotlib.pyplot.Axes</em>) – Axes object to plot everything upon</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="geographic_plotting.geomap.Zoom">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">geographic_plotting.geomap.</span></span><span class="sig-name descname"><span class="pre">Zoom</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">left</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">right</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bottom</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">top</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#geographic_plotting.geomap.Zoom" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Zoom object for easy-peasy automatic zooming to different parts of a geographic map</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>left</strong> (<em>int</em>) – left border of zoom</p></li>
+<li><p><strong>right</strong> (<em>int</em>) – right border of zoom</p></li>
+<li><p><strong>bottom</strong> (<em>int</em>) – bottom border</p></li>
+<li><p><strong>top</strong> (<em>int</em>) – you catch my drift right?</p></li>
+<li><p><strong>name</strong> (<em>str</em>) – name for this zoom, handy for automated exporting of maps</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="geographic_plotting.geomap.Zoom.apply">
+<span class="sig-name descname"><span class="pre">apply</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ax</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#geographic_plotting.geomap.Zoom.apply" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>ax</strong> (<em>matplotlib.pyplot.Axes</em>) – Axes object to plot everything upon</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<span class="target" id="module-geographic_plotting.xml_tools"></span><dl class="py function">
+<dt class="sig sig-object py" id="geographic_plotting.xml_tools.qml_harmonizer">
+<span class="sig-prename descclassname"><span class="pre">geographic_plotting.xml_tools.</span></span><span class="sig-name descname"><span class="pre">qml_harmonizer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path_leader</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">paths_followers</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#geographic_plotting.xml_tools.qml_harmonizer" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="geographic_plotting.xml_tools.read_colors_from_xml">
+<span class="sig-prename descclassname"><span class="pre">geographic_plotting.xml_tools.</span></span><span class="sig-name descname"><span class="pre">read_colors_from_xml</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">xml_path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#geographic_plotting.xml_tools.read_colors_from_xml" title="Permalink to this definition"></a></dt>
+<dd><p>Function name says it al</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>xml_path</strong> – </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="geographic_plotting.xml_tools.read_labels_from_xml">
+<span class="sig-prename descclassname"><span class="pre">geographic_plotting.xml_tools.</span></span><span class="sig-name descname"><span class="pre">read_labels_from_xml</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">xml_path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#geographic_plotting.xml_tools.read_labels_from_xml" title="Permalink to this definition"></a></dt>
+<dd><p>Function name says it al</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>xml_path</strong> – </p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="modules.html" class="btn btn-neutral float-left" title="geographic_plotting" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Levi Biersteker.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

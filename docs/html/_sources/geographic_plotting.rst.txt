@@ -1,0 +1,28 @@
+geographic\_plotting package
+============================
+
+.. automodule:: geographic_plotting
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Submodules
+----------
+
+
+.. automodule:: geographic_plotting.color_functions
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+
+.. automodule:: geographic_plotting.geomap
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+
+.. automodule:: geographic_plotting.xml_tools
+   :members:
+   :undoc-members:
+   :show-inheritance:

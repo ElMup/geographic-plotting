@@ -1,0 +1,40 @@
+.. plotting documentation master file, created by
+   sphinx-quickstart on Fri Jul  8 12:34:43 2022.
+   You can adapt this file completely to your liking, but it should at least
+   contain the root `toctree` directive.
+
+Welcome to geographic_plotting's documentation!
+===============================================
+Example of usage::
+    >>> # Assumes you have two arrays with a continuous result and a categorical vegetation type array to plot result over
+    >>> from plotting import GeoMap, ContinuousRasterLayer, CategoricalRasterLayer, BaseMap
+    >>> gmap = GeoMap()
+    >>> result_layer = ContinuousRasterLayer(result_array,
+                                         rio.transform.Affine(25.0, 0.0, 3412500.0, 0.0, -25.0, 5960000.0),
+                                         "viridis")
+    >>> vegetation_layer = CategoricalRasterLayer(vegetation_array,
+                                              rio.transform.Affine(2.5, 0.0, 3412500.0, 0.0, -2.5, 5960000.0),
+                                              [[80, 255, 55, 0.4], [80, 55, 255, 0.4]])
+    >>> vegetation_dict = {1:'Grass',2:'Trees'}
+    >>> gmap.add_layer(BaseMap(result_array.shape, rio.transform.Affine(25.0, 0.0, 3412500.0, 0.0, -25.0, 5960000.0), CRS.from_epsg(28992))
+    >>> gmap.add_layer(vegetation_layer)
+    >>> gmap.add_layer(result_layer)
+    >>> gmap.add_categorical_legend(vegetation_layer, vegetation_dict)
+    >>> gmap.add_colorbar(result_layer, "this is very nice color bar")
+    >>> gmap.title = "this is a very nice geographic map"
+    >>> fig, ax = plt.subplots(1, 1, figsize=(12.75, 5))
+    >>> gmap.draw(ax)
+
+.. toctree::
+   :maxdepth: 2
+   :caption: Contents:
+
+   modules
+
+
+Indices and tables
+==================
+
+* :ref:`genindex`
+* :ref:`modindex`
+* :ref:`search`

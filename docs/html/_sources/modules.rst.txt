@@ -1,0 +1,7 @@
+geographic_plotting
+===================
+
+.. toctree::
+   :maxdepth: 4
+
+   geographic_plotting
