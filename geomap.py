@@ -1,24 +1,39 @@
+from abc import abstractmethod, ABC
+from collections.abc import Iterable
+
+import contextily as cx
+import matplotlib
+import matplotlib.patches as mpatches
+import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
 import rasterio as rio
+from geopandas import GeoDataFrame
+from matplotlib import cm, colors
+from matplotlib.axes import Axes
 from matplotlib_scalebar.scalebar import ScaleBar
 from mpl_toolkits.axes_grid1 import make_axes_locatable
 from mpl_toolkits.axes_grid1.axes_divider import AxesDivider
+from mpl_toolkits.axes_grid1.inset_locator import inset_axes
 from rasterio.plot import plotting_extent
-import contextily as cx
-from matplotlib import cm, colors
-import matplotlib.pyplot as plt
-import geopandas as gp
-import matplotlib.patches as mpatches
-import numpy as np
-from abc import abstractmethod, ABC
+
+from .color_functions import get_rgba, darken_colorlist
+
+from dataclasses import dataclass, field
+
+
+@dataclass
+class LegendSettings:
+    title: str
+    inset: bool = True
+    lax_kwargs: dict = field(default_factory=dict)
+    legend_kwargs: dict = field(default_factory=dict)
+    colorbar_kwargs: dict = field(default_factory=lambda: {"aspect": 25})
+    colorbar_label_fontsize: int = 12
+    n_ticks: int = 5
 
 
 class Layer(ABC):
-    """Layer parent class"""
-
-    def __init__(self):
-        #: is this layer visible?
-        self.visible = True
-
     @abstractmethod
     def draw(self, ax: plt.Axes):
         """Draw this layer upon axes
@@ -33,7 +48,6 @@ class Layer(ABC):
 
 class RasterLayer(Layer):
     def __init__(self, raster, transform):
-        super().__init__()
         self.raster = raster
         self.transform = transform
         self.cmap = "viridis"
@@ -42,6 +56,9 @@ class RasterLayer(Layer):
         self.ceiling = np.ceil(np.nanmax(self.raster))
         if np.isnan(self.ceiling):
             self.ceiling = 1
+
+        # bottom of raster values
+        self.floor = np.floor(np.nanmin(self.raster))
 
     def draw(self, ax: plt.Axes):
         """Draw management type map as background
@@ -53,16 +70,14 @@ class RasterLayer(Layer):
         """
         cmap = cm.get_cmap(self.cmap)
         cmap.set_bad(alpha=0)
-        if self.visible:
-
-            # Draw actual raster layer
-            ax.imshow(
-                self.raster,
-                cmap=cmap,
-                norm=self.norm,
-                extent=plotting_extent(self.raster, self.transform),
-                interpolation="nearest",
-            )
+        # Draw actual raster layer
+        ax.imshow(
+            self.raster,
+            cmap=cmap,
+            norm=self.norm,
+            extent=plotting_extent(self.raster, self.transform),
+            interpolation="nearest",
+        )
 
 
 class ContinuousRasterLayer(RasterLayer):
@@ -76,7 +91,7 @@ class ContinuousRasterLayer(RasterLayer):
         rasterio transform object to know where to plot layer
     cmap : str, matplotlib.colors.ListedColormap
         string or ListedColormap specifying which colormap to plot with
-    cmap_stepsize : int
+    stepsize : int
         the number of steps between each whole number. default is 10, so that the colormap is divided into steps of 0.1
     """
 
@@ -85,18 +100,21 @@ class ContinuousRasterLayer(RasterLayer):
         raster: np.array,
         transform: rio.transform,
         cmap: str or list = "viridis",
-        cmap_stepsize: int = 10,
+        stepsize: int = 10,
     ):
         super().__init__(raster, transform)
 
-        #: make normalization
-        self.norm = colors.Normalize(vmin=0, vmax=self.ceiling)
-
-        # specify total number of steps
-        number_of_steps = int(self.ceiling * abs(cmap_stepsize))
-
         #: colormap for continuous raster layer
-        self.cmap = cm.get_cmap(cmap, number_of_steps)
+        self.cmap = matplotlib.colormaps[cmap]
+        self.stepsize = stepsize
+
+        #: make normalization
+        self.norm = colors.BoundaryNorm(
+            boundaries=np.arange(
+                self.floor, self.ceiling + self.stepsize, self.stepsize
+            ),
+            ncolors=self.cmap.N,
+        )
 
 
 class CategoricalRasterLayer(RasterLayer):
@@ -116,12 +134,10 @@ class CategoricalRasterLayer(RasterLayer):
         super().__init__(raster, transform)
 
         #: normalization for layer
-        if self.ceiling <= 1:
-            self.norm = plt.Normalize(0, 1)
-        else:
-            self.norm = colors.BoundaryNorm(
-                boundaries=np.arange(1, self.ceiling + 1) - 0.5, ncolors=self.ceiling
-            )
+        self.norm = colors.BoundaryNorm(
+            boundaries=np.arange(0, self.ceiling) + 0.5, ncolors=self.ceiling
+        )
+
         #: colormap for this layer
         self.cmap = colors.ListedColormap(colorlist)
 
@@ -132,23 +148,20 @@ class VectorLayer(Layer):
     Parameters
     ----------
     vector: geopandas.GeoDataFrame
-        GeodataFrame containing the vector
+        GeodataFrame containing the _vector
     kwargs
         Keyword arguments to set layer properties
     """
 
-    def __init__(self, vector: gp.GeoDataFrame, **kwargs):
-        super().__init__()
-        self.vector = vector
+    def __init__(self, vector: GeoDataFrame, **kwargs):
+        self._vector = vector
+        self.n_shapes = len(vector)
         self.facecolor = "none"
-        self.kwargs = kwargs
-        if "norm" in kwargs:
-            self.norm = kwargs["norm"]
-        if "cmap" in kwargs:
-            self.cmap = kwargs["cmap"]
+        self._kwargs = kwargs
+        self._label_settings = None
 
-    def draw(self, ax):
-        """Draw this vector layer on the Axes
+    def draw(self, ax, **kwargs):
+        """Draw this _vector layer on the Axes
 
         Parameters
         ----------
@@ -156,10 +169,138 @@ class VectorLayer(Layer):
             Axes object to plot everything upon
 
         """
-        self.vector.plot(ax=ax, aspect=1, **self.kwargs)
+        self._vector.plot(ax=ax, aspect=1, **self._kwargs)
+
+        if self._label_settings is not None:
+            for setting in self._label_settings:
+                ax.annotate(**setting)
+
+    def add_shape_labels(self, column: str, **kwargs):
+        """Automatically add a label for every polygon in this layer. You can pass kwargs used for annotate, like path
+        effects. kwargs of single length will be made to lists of same length as N labels.
+
+        Parameters
+        ----------
+        column: str
+            The column in VectorLayer dataframe to use for shape label text
+        kwargs
+
+        Returns
+        -------
+
+        """
+        self._label_settings = []
+        for i, row in self._vector.reset_index().iterrows():
+            settings = {}
+
+            # Add text
+            if isinstance(row[column], float):
+                settings["text"] = f"{row[column]:.2f}"
+            else:
+                settings["text"] = row[column]
+
+            # Add coordinates
+            if "xy" in kwargs:
+                settings["xy"] = kwargs["xy"][i]
+            else:
+                settings["xy"] = row.geometry.representative_point().coords[0]
+
+            # Add each keyword argument
+            for kw, arg in kwargs.items():
+                if kw not in ["text", "xy"]:
+                    if not isinstance(arg, str) and isinstance(arg, Iterable):
+                        settings[kw] = arg[i]
+                    else:
+                        settings[kw] = arg
+            self._label_settings.append(settings)
 
 
-class MtLegend:
+class NumericVectorLayer(VectorLayer):
+    def __init__(self, vector: GeoDataFrame, cmap: str = "viridis", **kwargs):
+        if "color" not in kwargs or kwargs["color"] is None:
+            self.cmap = matplotlib.colormaps[cmap]
+            kwargs["color"] = [self.cmap(self.norm(value)) for value in vector.index]
+        else:
+            self.cmap = colors.LinearSegmentedColormap.from_list(
+                "Temporary_cmap", kwargs["color"]
+            )
+
+        # add darkened edgecolors
+        if "edgecolor" not in kwargs:
+            kwargs["edgecolor"] = darken_colorlist(kwargs["color"])
+        super().__init__(vector, **kwargs)
+
+
+class ContinuousVectorLayer(NumericVectorLayer):
+    def __init__(
+        self,
+        vector: GeoDataFrame,
+        stepsize: int = 1,
+        **kwargs,
+    ):
+        self.stepsize = stepsize
+        self.ceiling = np.ceil(vector.index.max())
+        self.floor = np.floor(vector.index.min())
+        self.norm = colors.BoundaryNorm(
+            np.arange(self.floor, self.ceiling, self.stepsize), 256
+        )
+        super().__init__(vector, **kwargs)
+
+
+class OrdinalVectorLayer(NumericVectorLayer):
+    def __init__(
+        self,
+        vector: GeoDataFrame,
+        **kwargs,
+    ):
+        if vector.index.nunique() == 1:
+            raise ValueError(
+                "Not enough categories, provide a GeodataFrame column with more than 1 category"
+            )
+        else:
+            self.stepsize = 1
+            self.categories = vector.index.unique()
+            self.ceiling = max(self.categories)
+            self.floor = min(self.categories)
+            self.norm = matplotlib.colors.Normalize(vmin=self.floor, vmax=self.ceiling)
+            super().__init__(vector, **kwargs)
+
+
+class CategoricalVectorLayer(VectorLayer):
+    def __init__(self, vector: GeoDataFrame, **kwargs):
+        # save categories in class as they are needed when making a legend
+        self.categories = vector.index.unique()
+
+        # make normalization
+        self.norm = {category: i for i, category in enumerate(self.categories)}.get
+
+        # set colors if not given
+        if "color" not in kwargs or kwargs["color"] is None:
+            kwargs["color"] = [get_rgba(self.norm(value), 1) for value in vector.index]
+        if "edgecolor" not in kwargs:
+            kwargs["edgecolor"] = darken_colorlist(kwargs["color"])
+
+        #: colormap for this layer
+        self.cmap = colors.ListedColormap(kwargs["color"])
+
+        super().__init__(vector, **kwargs)
+
+
+class Legend(ABC):
+    def __init__(self, layer, settings):
+        self.layer = layer
+        self.settings = settings
+
+    @abstractmethod
+    def draw(self, lax: Axes):
+        pass
+
+    @abstractmethod
+    def _get_lax(self, **kwargs):
+        pass
+
+
+class MtLegend(Legend):
     """Management type legend class
 
     Parameters
@@ -170,13 +311,24 @@ class MtLegend:
         Dictionary to translate integer values to labels or landscape type codes
     """
 
-    def __init__(self, categorical_raster: CategoricalRasterLayer, dictionary: dict):
-        self.norm = categorical_raster.norm
-        self.dictionary = dictionary
-        self.cmap = categorical_raster.cmap
-        self.visible = categorical_raster.visible
+    def __init__(
+        self,
+        categorical_layer: CategoricalRasterLayer
+        | CategoricalVectorLayer
+        | OrdinalVectorLayer,
+        settings: LegendSettings,
+    ):
+        super().__init__(categorical_layer, settings)
 
-    def draw(self, divider: AxesDivider):
+    def _get_lax(self, ax: Axes, **kwargs):
+        if self.settings.inset:
+            lax = inset_axes(ax, **self.settings.lax_kwargs)
+        else:
+            lax = make_axes_locatable(ax).append_axes(**self.settings.lax_kwargs)
+        lax.axis("off")
+        return lax
+
+    def draw(self, ax):
         """
 
         Parameters
@@ -186,34 +338,26 @@ class MtLegend:
 
 
         """
-        if self.visible:
-            # management_map legend in seperate axes
-            lax = divider.append_axes("left", size=0.1, pad=0.08)
-            lax.axis("off")
-            mtypes = list(self.dictionary.keys())
 
-            # create a patch (proxy artist) for every color
-            patches = [
-                mpatches.Patch(
-                    color=self.cmap(self.norm(mtype)),
-                    label=self.dictionary[mtype],
-                )
-                for mtype in mtypes
-            ]
-            # put those patched as legend-handles into the legend
-            legend = lax.legend(
-                handles=patches,
-                bbox_to_anchor=(-9.5, 0.5),
-                loc=10,
-                borderaxespad=0.0,
-                ncol=2,
-                edgecolor=[0, 0, 0, 1],
-                prop={"size": 8},
+        # create a patch (proxy artist) for every color
+        patches = [
+            mpatches.Patch(
+                color=self.layer.cmap(self.layer.norm(category)),
+                label=category,
             )
-            legend.get_frame().set_linewidth(0.8)
+            for category in self.layer.categories
+        ]
+
+        # put those patched as legend-handles into the legend
+        legend = self._get_lax(ax).legend(
+            handles=patches,
+            title=self.settings.title,
+            **self.settings.legend_kwargs,
+        )
+        legend.get_frame().set_linewidth(0.8)
 
 
-class ColorBar:
+class ColorBar(Legend):
     """A color bar, pretty straightforward
 
     Parameters
@@ -224,13 +368,30 @@ class ColorBar:
         Label vor the color bar
     """
 
-    def __init__(self, continuous_layer:ContinuousRasterLayer, label: str):
-        self.mappable = cm.ScalarMappable(continuous_layer.norm, continuous_layer.cmap)
-        self.label = label
-        self.visible = continuous_layer.visible
-        self.ticks = np.arange(0,continuous_layer.ceiling+1,1)
+    def _get_lax(self, ax: Axes, **kwargs):
+        if self.settings.inset:
+            return inset_axes(ax, **self.settings.lax_kwargs)
+        else:
+            return make_axes_locatable(ax).append_axes(**self.settings.lax_kwargs)
 
-    def draw(self, divider: AxesDivider):
+    def __init__(
+        self,
+        layer: ContinuousRasterLayer | ContinuousVectorLayer,
+        settings: LegendSettings,
+    ):
+        super().__init__(layer, settings)
+        self.mappable = cm.ScalarMappable(layer.norm, layer.cmap)
+
+        if -1 <= layer.ceiling <= 1:
+            ticks_step = 0.1
+        else:
+            ticks_step = (layer.ceiling - layer.floor) / settings.n_ticks
+            if ticks_step >= 1:
+                ticks_step = np.floor(ticks_step)
+
+        self.ticks = np.arange(layer.floor, layer.ceiling + ticks_step, ticks_step)
+
+    def draw(self, ax: Axes):
         """Draw colorbar for result layer
 
         Parameters
@@ -239,13 +400,17 @@ class ColorBar:
             AxesDivider which will make seperate axes for color bar. `Example for how to make divider <https://matplotlib.org/stable/gallery/axes_grid1/demo_colorbar_with_axes_divider.html>`_
 
         """
-        cax = divider.append_axes("right", size="2%", pad=0.08)
-        cbar = plt.colorbar(self.mappable, cax=cax, aspect=25, ticks=self.ticks)
-        cbar.set_label(self.label, size=20)
-        cbar.ax.tick_params(labelsize=17.5)
+        cbar = plt.colorbar(
+            self.mappable,
+            cax=self._get_lax(ax),
+            ticks=self.ticks,
+            **self.settings.colorbar_kwargs,
+        )
+        cbar.set_label(self.settings.title, size=self.settings.colorbar_label_fontsize)
+        cbar.ax.tick_params(labelsize=self.settings.colorbar_label_fontsize)
 
 
-class BaseMap(Layer):
+class RasterBaseMap(Layer):
     def __init__(
         self,
         shape: tuple,
@@ -266,7 +431,6 @@ class BaseMap(Layer):
         source
             contextily basemap provider
         """
-        super().__init__()
         self.shape = shape
         self.transform = transform
         self.crs = crs
@@ -280,14 +444,13 @@ class BaseMap(Layer):
         ax: matplotlib.pyplot.Axes
             Axes object to draw basemap on
         """
-        if self.visible:
-            data = np.zeros(self.shape)
-            data[0][0] = 1
-            data[-1][-1] = 1
+        data = np.zeros(self.shape)
+        data[0][0] = 1
+        data[-1][-1] = 1
 
-            # tmp is raster with just two dots which is used for contextily basemap
-            ax.imshow(data, extent=plotting_extent(data, transform=self.transform))
-            cx.add_basemap(ax=ax, crs=self.crs, source=self.source, zoom=11)
+        # tmp is raster with just two dots which is used for contextily basemap
+        ax.imshow(data, extent=plotting_extent(data, transform=self.transform))
+        cx.add_basemap(ax=ax, crs=self.crs, source=self.source, interpolation="sinc")
 
 
 class GeoMap:
@@ -314,31 +477,31 @@ class GeoMap:
     """
 
     def __init__(self):
-        #: list of layers
-        self._layers = []
-
-        #: list of legends
-        self._legends = []
-
-        #: plot basemap labels over all other layers?
-        self.do_basemap_labels = False
-
-        #: basmap label provider
-        self.basemap_labels = cx.providers.Stamen.TonerLabels
+        #: list of features
+        self.features = []
 
         #: draw a north arrow?
         self.north_arrow = False
 
-        #: arrow location as (x, y, correction)
-        self.arrow_parameters = (0.96, 0.96, 0.075)
+        #: arrow location as (x, y, correction) and settings
+        self.arrow_position = (0.96, 0.96, 0.075)
+        self.arrow_kwargs = dict(
+            arrowprops=dict(facecolor="black", width=4, headwidth=12.5),
+            ha="center",
+            va="center",
+            fontsize=18,
+            family="serif",
+        )
 
-        #: draw a scalebar?
-        self.scalebar = False
+        #: draw a draw_scalebar?
+        self.draw_scalebar = False
+        self.scalebar=ScaleBar(1, "m", location="upper left", box_alpha=0)
 
-        #: the title for this GeoMap
+        #: the title for this GeoMap and settings
         self.title = "<Title>"
+        self.title_kwargs = dict(weight="semibold", fontsize=15)
 
-    def add_layer(self, layer: Layer):
+    def add_feature(self, feature: Layer or Legend):
         """Add a layer to the GeoMap
 
         Parameters
@@ -347,41 +510,18 @@ class GeoMap:
             The layer to add to this GeoMAp
 
         """
-        if isinstance(layer, BaseMap):
-            if len(self._layers) == 0 or not isinstance(self._layers[0], BaseMap):
-                self._layers.insert(0, layer)
+        if isinstance(feature, RasterBaseMap):
+            if len(self.features) == 0 or not isinstance(
+                self.features[0], RasterBaseMap
+            ):
+                self.features.insert(0, feature)
             else:
                 raise TypeError("Basemap is already defined")
         else:
-            self._layers.append(layer)
-
-    def add_categorical_legend(
-        self, categorical_layer: CategoricalRasterLayer, dictionary: dict
-    ):
-        """Add categorical Legend to GeoMap
-
-        Parameters
-        ----------
-        categorical_layer
-        dictionary
-
-        """
-        self._legends.append(MtLegend(categorical_layer, dictionary))
-
-    def add_colorbar(self, continuous_layer, label: str):
-        """Add a color bar to this GeoMap
-
-        Parameters
-        ----------
-        continuous_layer
-            continuous layer to get colormap and normalization from
-        label: str
-            what does this bar say?
-        """
-        self._legends.append(ColorBar(continuous_layer, label))
+            self.features.append(feature)
 
     def draw(self, ax: plt.Axes):
-        """Draw basemap and raster layers in order and plot all vector layers.
+        """Draw basemap and raster layers in order and plot all _vector layers.
 
         Parameters
         ----------
@@ -389,44 +529,31 @@ class GeoMap:
             Axes object to plot everything on
 
         """
-        for layer in self._layers:
-            if layer.visible:
-                layer.draw(ax)
+        for feature in self.features:
+            feature.draw(ax)
 
-        divider = make_axes_locatable(ax)
-        for legend in self._legends:
-            if legend.visible:
-                legend.draw(divider)
-
-        # plot and do all secondary shit like labels, scalebar, north arrow, turning off ticks etc on top of other
+        # plot and do all secondary shit like draw_scalebar, north arrow, turning off ticks etc on top of other
         # raster layers
-        # labels
-        if self.do_basemap_labels:
-            cx.add_basemap(ax=ax, crs=self._layers[0].crs, source=self.basemap_labels)
 
-        # draw scalebar
-        if self.scalebar:
-            ax.add_artist(ScaleBar(1, "m", location="upper left", box_alpha=0))
+        # draw draw_scalebar
+        if self.draw_scalebar:
+            ax.add_artist(self.scalebar)
 
         # draw north arrow
         if self.north_arrow:
             ax.annotate(
                 "N",
-                xy=(self.arrow_parameters[0], self.arrow_parameters[1]),
+                xy=(self.arrow_position[0], self.arrow_position[1]),
                 xytext=(
-                    self.arrow_parameters[0],
-                    self.arrow_parameters[1] - self.arrow_parameters[2],
+                    self.arrow_position[0],
+                    self.arrow_position[1] - self.arrow_position[2],
                 ),
-                arrowprops=dict(facecolor="black", width=4, headwidth=12.5),
-                ha="center",
-                va="center",
-                fontsize=18,
-                family="serif",
                 xycoords=ax.transAxes,
+                **self.arrow_kwargs,
             )
 
         # title and ticks
-        ax.set_title(self.title, weight="semibold", fontsize=15)
+        ax.set_title(self.title, **self.title_kwargs)
         ax.set_xticks([])
         ax.set_yticks([])
 
@@ -448,7 +575,7 @@ class Zoom:
         name for this zoom, handy for automated exporting of maps
     """
 
-    def __init__(self, left: int, right: int, bottom: int, top: int, name: str):
+    def __init__(self, left: int, right: int, bottom: int, top: int, name: str = ""):
         self.left = left
         self.right = right
         self.bottom = bottom

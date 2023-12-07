@@ -39,3 +39,33 @@ def zero_different_colormap(
 
     #: colormap for continuous raster layer
     return colors.ListedColormap(colorlist)
+
+
+def get_rgba(seed: int, alpha: float) -> list[float, float, float, float]:
+    """Generate three floats between 0 and 1 for use as rgba color.
+
+    :param seed:
+    :param alpha:
+    :return:
+    """
+    np.random.seed(seed)
+    return [
+        np.random.rand(),
+        np.random.rand(),
+        np.random.rand(),
+        alpha,
+    ]
+
+
+def darken_colorlist(colorlist) -> list:
+    darken_factor = 0.7
+    darkened_colorlist = [
+        [
+            color[0] * darken_factor,
+            color[1] * darken_factor,
+            color[2] * darken_factor,
+            color[3],
+        ]
+        for color in colorlist
+    ]
+    return darkened_colorlist
