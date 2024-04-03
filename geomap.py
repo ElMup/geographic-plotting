@@ -47,18 +47,25 @@ class Layer(ABC):
 
 
 class RasterLayer(Layer):
-    def __init__(self, raster, transform):
+    def __init__(self, raster, transform, value_range:tuple[int,int] or None = None):
         self.raster = raster
         self.transform = transform
         self.cmap = "viridis"
 
-        #: ceiling of raster values
-        self.ceiling = np.ceil(np.nanmax(self.raster))
-        if np.isnan(self.ceiling):
-            self.ceiling = 1
+        if value_range is None:
 
-        # bottom of raster values
-        self.floor = np.floor(np.nanmin(self.raster))
+            # bottom of raster values
+            self.floor = np.floor(np.nanmin(self.raster))
+            if np.isnan(self.floor):
+                self.floor = 0
+
+            # ceiling of raster values
+            self.ceiling = np.ceil(np.nanmax(self.raster))
+            if np.isnan(self.ceiling):
+                self.ceiling = 1
+        else:
+            self.floor = value_range[0]
+            self.ceiling = value_range[1]
 
     def draw(self, ax: plt.Axes):
         """Draw management type map as background
@@ -101,8 +108,9 @@ class ContinuousRasterLayer(RasterLayer):
         transform: rio.transform,
         cmap: str or list = "viridis",
         stepsize: int = 10,
+        value_range: tuple[int,int] or None=None,
     ):
-        super().__init__(raster, transform)
+        super().__init__(raster, transform, value_range)
 
         #: colormap for continuous raster layer
         self.cmap = matplotlib.colormaps[cmap]
@@ -169,6 +177,8 @@ class VectorLayer(Layer):
             Axes object to plot everything upon
 
         """
+        if "color" in kwargs and len(kwargs["color"]) > len(self._vector.index):
+            raise IndexError("The number of colors provided should match the number of categories")
         self._vector.plot(ax=ax, aspect=1, **self._kwargs)
 
         if self._label_settings is not None:
@@ -236,13 +246,18 @@ class ContinuousVectorLayer(NumericVectorLayer):
         self,
         vector: GeoDataFrame,
         stepsize: int = 1,
+        value_range: tuple[int:int] or None = None,
         **kwargs,
     ):
         self.stepsize = stepsize
-        self.ceiling = np.ceil(vector.index.max())
-        self.floor = np.floor(vector.index.min())
+        if value_range is None:
+            self.ceiling = np.ceil(vector.index.max())
+            self.floor = np.floor(vector.index.min())
+        else:
+            self.ceiling = value_range[1]
+            self.floor = value_range[0]
         self.norm = colors.BoundaryNorm(
-            np.arange(self.floor, self.ceiling, self.stepsize), 256
+            np.arange(self.floor, self.ceiling+self.stepsize, self.stepsize), 256
         )
         super().__init__(vector, **kwargs)
 
@@ -251,17 +266,30 @@ class OrdinalVectorLayer(NumericVectorLayer):
     def __init__(
         self,
         vector: GeoDataFrame,
+        value_range: tuple[int:int] or None = None,
         **kwargs,
     ):
+        """
+        Only use value_range if all values are in fact in a range! So should be no missing values
+        or jumps in values. Otherwise, better to use categorical.
+
+        :param vector:
+        :param value_range:
+        """
         if vector.index.nunique() == 1:
             raise ValueError(
                 "Not enough categories, provide a GeodataFrame column with more than 1 category"
             )
         else:
             self.stepsize = 1
-            self.categories = vector.index.unique()
-            self.ceiling = max(self.categories)
-            self.floor = min(self.categories)
+            if value_range is None:
+                self.categories = vector.index.unique()
+                self.ceiling = max(self.categories)
+                self.floor = min(self.categories)
+            else:
+                self.ceiling=value_range[1]
+                self.floor=value_range[0]
+                self.categories = np.arange(self.floor,self.ceiling+self.stepsize)
             self.norm = matplotlib.colors.Normalize(vmin=self.floor, vmax=self.ceiling)
             super().__init__(vector, **kwargs)
 
